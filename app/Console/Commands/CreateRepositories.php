@@ -19,7 +19,7 @@ class CreateRepositories extends Command
      *
      * @var string
      */
-    protected $description = 'Tạo Module Repositories';
+    protected $description = 'Module Repositories';
 
     /**
      * Execute the console command.
@@ -28,7 +28,7 @@ class CreateRepositories extends Command
     {
         $module = $this->argument('module');
         if (File::exists(base_path('app/Repositories/' . $module))) {
-            return $this->error("Module '{$module}' đã tồn tại");
+            return $this->error("Created module repository '{$module}' already exists");
         }
         $srcFolder = base_path('app/Repositories/' . $module);
         if (!File::exists($srcFolder)) {
@@ -39,9 +39,9 @@ class CreateRepositories extends Command
             $modelsContent = File::get($modelsFile);
             $modelsContent = str_replace("{module}", $module, $modelsContent);
             File::put($srcFolder . "/" . $module . "Repository.php", $modelsContent);
-            return $this->info('Chúc mừng bạn đã tạo thành công');
+            return $this->info("Created module repository '{$module}' successfully");
         } else {
-            return $this->error("Module Repositories '{$module}' đã tồn tại");
+            return $this->error("Created module repository '{$module}' already exists");
         }
     }
 
