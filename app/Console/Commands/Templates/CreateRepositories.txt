@@ -1,0 +1,89 @@
+<?php
+//Lưu ý note tất cả lại để cho mn biết :v
+namespace App\Repositories\{module};
+
+use App\Models\{module};
+use App\Repositories\BaseRepository;
+
+class {module}Repository extends BaseRepository
+{
+    /**
+     * Thiết lập Model tương tác
+     *
+     * @return string
+     */
+    public function model()
+    {
+        return {module}::class;
+    }
+
+    /**
+     * Lấy danh sách phân trang
+     *
+     * @param int $limit
+     * @param array $columns
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function paginate{module}s($limit = 25, array $columns = ['*'])
+    {
+        return $this->paginate($limit, $columns);
+    }
+
+    /**
+     * Thêm mới
+     *
+     * @param array $data
+     * @return \App\Models\{module}
+     */
+    public function create{module}(array $data)
+    {
+        return $this->create($data);
+    }
+
+    /**
+     * Cập nhật
+     *
+     * @param int $id
+     * @param array $data
+     * @return \App\Models\{module}
+     */
+    public function update{module}ById($id, array $data)
+    {
+        return $this->updateById($id, $data);
+    }
+
+    /**
+     * Xóa
+     *
+     * @param int $id
+     * @return bool|null
+     * @throws \Exception
+     */
+    public function delete{module}ById($id)
+    {
+        return $this->deleteById($id);
+    }
+
+    /**
+     * Lấy tất cả
+     *
+     * @param array $columns
+     * @return \Illuminate\Database\Eloquent\Collection|\App\Models\{module}[]
+     */
+    public function getAll{module}s(array $columns = ['*'])
+    {
+        return $this->all($columns);
+    }
+
+    /**
+     * Lấy chi tiết
+     *
+     * @param int $id
+     * @param array $columns
+     * @return \App\Models\{module}
+     */
+    public function get{module}ById($id, array $columns = ['*'])
+    {
+        return $this->getById($id, $columns);
+    }
+}
