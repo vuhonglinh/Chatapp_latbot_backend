@@ -42,12 +42,15 @@ class RoomRepository extends BaseRepository
     public function addToGroup($request, $room_id)
     {
         try {
-//            $
-        }catch (\Throwable $e){
+            $room = $this->where('id', $room_id)->first();
+            $room->update([
+                'name' => $request->name,
+                'ids' => array_merge(array_map('intval', $request->ids), [auth()->user()->id]),
+            ]);
+        } catch (\Throwable $e) {
             throw $e;
         }
     }
-
 
     public function getMessages($request, $room_id)
     {
