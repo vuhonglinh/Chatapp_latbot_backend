@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class MessageResource extends JsonResource
+class RoomResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,9 +16,11 @@ class MessageResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'sender' => $this->when($this->sender, new UserResource($this->sender)),
-            'message' => $this->message,
-            'status' => $this->status,
+            'name' => $this->name,
+            'slug' => $this->slug,
+            'type' => $this->type,
+            'ids' => $this->ids,
+            'creator' => $this->when($this->creator, new UserResource($this->creator)),
         ];
     }
 }

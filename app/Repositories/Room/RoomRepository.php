@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Repositories\Room;
 
 use App\Models\Room;
@@ -11,12 +12,50 @@ class RoomRepository extends BaseRepository
         return Room::class;
     }
 
-    public function getMessages($request,$room_id){
-        try{
-            $room = $this->where('id',$room_id)->first();
+    public function getRoomGroups($request)
+    {
+        try {
+            $user = $request->user();
+            $rooms = $this->model->whereJsonContains('ids', $user->id)->get();
+            return $rooms;
+        } catch (\Throwable $e) {
+
+        }
+    }
+
+    public function createRoomGroup($request)
+    {
+        try {
+            $user = $request->user();
+            $room = $this->create([
+                'name' => $request->name,
+                'type' => 'group',
+                'ids' => $request->ids,
+                'creator_id' => $user->id,
+            ]);
+            return $room;
+        } catch (\Throwable $e) {
+            throw $e;
+        }
+    }
+
+    public function addToGroup($request, $room_id)
+    {
+        try {
+//            $
+        }catch (\Throwable $e){
+            throw $e;
+        }
+    }
+
+
+    public function getMessages($request, $room_id)
+    {
+        try {
+            $room = $this->where('id', $room_id)->first();
             $messages = $room->messages;
             return $messages;
-        }catch (\Throwable $e){
+        } catch (\Throwable $e) {
             throw $e;
         }
     }
@@ -25,7 +64,7 @@ class RoomRepository extends BaseRepository
     {
         try {
             $user = $request->user();
-            $room = $this->where('id',$room_id)->first();
+            $room = $this->where('id', $room_id)->first();
             $message = $room->messages()->create([
                 'sender_id' => $user->id,
                 'message' => $request->message,

@@ -11,7 +11,6 @@ class Room extends Model
     protected $fillable = [
         'name',
         'slug',
-        'customer_id',
         'type',
         'ids',
         'creator_id',
@@ -26,7 +25,13 @@ class Room extends Model
         return 'slug';
     }
 
-    public function messages(){
-        return $this->hasMany(Message::class,'room_id','id');
+    public function messages()
+    {
+        return $this->hasMany(Message::class, 'room_id', 'id');
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'creator_id', 'id');
     }
 }
