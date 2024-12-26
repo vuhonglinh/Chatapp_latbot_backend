@@ -1,5 +1,4 @@
 <?php
-//Lưu ý note tất cả lại để cho mn biết :v
 namespace App\Repositories\Room;
 
 use App\Models\Room;
@@ -12,44 +11,27 @@ class RoomRepository extends BaseRepository
         return Room::class;
     }
 
-    public function paginateRooms($limit = 25, array $columns = ['*'])
-    {
-        return $this->paginate($limit, $columns);
-    }
-
-    public function createRoom(array $data)
-    {
-        return $this->create($data);
-    }
-
-
-    public function updateRoomById($id, array $data)
-    {
-        return $this->updateById($id, $data);
-    }
-
-    public function deleteRoomById($id)
-    {
-        return $this->deleteById($id);
-    }
-
-
-    public function getAllRooms(array $columns = ['*'])
-    {
-        return $this->all($columns);
-    }
-
-
-    public function getRoomById($id, array $columns = ['*'])
-    {
-        return $this->getById($id, $columns);
+    public function getMessages($request,$room_id){
+        try{
+            $room = $this->where('id',$room_id)->first();
+            $messages = $room->messages;
+            return $messages;
+        }catch (\Throwable $e){
+            throw $e;
+        }
     }
 
     public function sendMessage($request, $room_id)
     {
-        try{
-//            $message = $this->model->cea
-        }catch (\Throwable $e){
+        try {
+            $user = $request->user();
+            $room = $this->where('id',$room_id)->first();
+            $message = $room->messages()->create([
+                'sender_id' => $user->id,
+                'message' => $request->message,
+            ]);
+            return $message;
+        } catch (\Throwable $e) {
             throw $e;
         }
     }

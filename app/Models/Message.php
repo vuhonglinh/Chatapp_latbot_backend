@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\MessageSent;
 use Illuminate\Database\Eloquent\Model;
 
 class Message extends Model
@@ -12,7 +13,6 @@ class Message extends Model
         'room_id',
         'sender_id',
         'message',
-        'message_type',
         'status',
     ];
 
@@ -26,6 +26,14 @@ class Message extends Model
     public function room()
     {
         return $this->belongsTo(Room::class, 'room_id', 'id');
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+        self::saved(function ($message) {
+            broadcast(new MessageSent($message->room, $message))->toOthers();
+        });
     }
 
 }
