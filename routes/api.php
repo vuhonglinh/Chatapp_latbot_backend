@@ -1,10 +1,10 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
-    return $request->user();
-});
 
-
+//Google
+Route::get('/auth/google', [AuthController::class, 'loginGoogle']);
+Route::post('/auth/google/callback', [AuthController::class, 'callbackGoogle']);
