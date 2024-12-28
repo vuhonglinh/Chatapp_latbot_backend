@@ -7,6 +7,7 @@ use App\Repositories\User\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Laravel\Socialite\Facades\Socialite;
 use Laravel\Passport\Client;
 
@@ -44,6 +45,7 @@ class AuthController extends Controller
             $customer = $this->customerRepository->loginOauth($data);
             $response = $this->createToken($customer->email, 18072001);
             $token = $response->json();
+            Log::info($token);
             $cookie = cookie('refresh_token', $token['refresh_token'], 43200, '/', null, true);
             return response()->json([
                 'data' => [

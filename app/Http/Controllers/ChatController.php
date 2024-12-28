@@ -4,20 +4,38 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\MessageResource;
 use App\Http\Resources\RoomResource;
+use App\Http\Resources\UserResource;
 use App\Repositories\Message\MessageRepository;
 use App\Repositories\Room\RoomRepository;
+use App\Repositories\User\UserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Response;
 
 class ChatController extends Controller
 {
-    private $roomRepository, $messageRepository;
+    private $roomRepository, $messageRepository, $userRepository;
 
-    public function __construct(RoomRepository $roomRepository, MessageRepository $messageRepository)
+    public function __construct(RoomRepository $roomRepository, MessageRepository $messageRepository, UserRepository $userRepository)
     {
         $this->roomRepository = $roomRepository;
         $this->messageRepository = $messageRepository;
+        $this->userRepository = $userRepository;
+    }
+
+    public function getUsers(Request $request)
+    {
+        try {
+            $users = $this->userRepository->getUsers($request);
+            return response()->json([
+                'message' => 'Get users successfully',
+                'data' => UserResource::collection($users)
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ]);
+        }
     }
 
     public function getGroups(Request $request)
