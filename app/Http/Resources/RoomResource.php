@@ -21,6 +21,7 @@ class RoomResource extends JsonResource
             'type' => $this->type,
             'ids' => $this->ids,
             'creator' => $this->when($this->creator, new UserResource($this->creator)),
+            'messages' => $this->when($this->messages, MessageResource::collection($this->messages)),
         ];
     }
 }

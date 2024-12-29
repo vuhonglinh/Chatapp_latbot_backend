@@ -3,6 +3,7 @@
 namespace App\Repositories\Room;
 
 use App\Models\Room;
+use App\Models\User;
 use App\Repositories\BaseRepository;
 
 class RoomRepository extends BaseRepository
@@ -19,7 +20,6 @@ class RoomRepository extends BaseRepository
             $rooms = $this->model->whereJsonContains('ids', $user->id)->get();
             return $rooms;
         } catch (\Throwable $e) {
-
         }
     }
 
@@ -52,12 +52,27 @@ class RoomRepository extends BaseRepository
         }
     }
 
-    public function getMessages($request, $room_id)
+    public function getMessages($request, $slug)
     {
         try {
-            $room = $this->where('id', $room_id)->first();
-            $messages = $room->messages;
-            return $messages;
+            $user = $request->user();
+            $userRequest = User::where('slug', $slug)->first();
+            $room = $this->model
+                ->whereRaw('JSON_CONTAINS(ids, ?)', [json_encode($user->id)])
+                ->whereRaw('JSON_CONTAINS(ids, ?)', [json_encode($userRequest->id)])
+                ->whereRaw('JSON_LENGTH(ids) = 2')
+                ->first();
+
+            if ($room) {
+                return $room;
+            }
+            $room = $this->model->create([
+                'name' => now()->timestamp,
+                'slug' => now()->timestamp,
+                'type' => 'private',
+                'ids' => [$userRequest->id, $user->id],
+            ]);
+            return $room;
         } catch (\Throwable $e) {
             throw $e;
         }

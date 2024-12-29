@@ -83,13 +83,13 @@ class ChatController extends Controller
     }
 
 
-    public function getRoomMessages(Request $request, $room_id)
+    public function getRoomMessages(Request $request, $slug)
     {
         try {
-            $messages = $this->roomRepository->getMessages($request, $room_id);
+            $room = $this->roomRepository->getMessages($request, $slug);
             return response()->json([
                 'message' => 'Get all messages successfully',
-                'data' => MessageResource::collection($messages)
+                'data' => new RoomResource($room)
             ]);
         } catch (\Throwable $e) {
             return response()->json([
@@ -98,10 +98,10 @@ class ChatController extends Controller
         }
     }
 
-    public function send(Request $request, $room_id)
+    public function send(Request $request, $slug)
     {
         try {
-            $message = $this->roomRepository->sendMessage($request, $room_id);
+            $message = $this->roomRepository->sendMessage($request, $slug);
             return response()->json([
                 'message' => 'Send message successfully',
                 'data' => new MessageResource($message)

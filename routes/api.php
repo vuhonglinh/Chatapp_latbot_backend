@@ -7,8 +7,10 @@ use Illuminate\Support\Facades\Route;
 
 
 
-Route::middleware('auth:api')->group(function(){
-    Route::get('user',[ChatController::class,'getUsers']);
+Route::middleware('auth:api')->group(function () {
+    Route::get('user', [ChatController::class, 'getUsers']);
+    Route::get('message/{slug}', [ChatController::class, 'getRoomMessages']);
+    Route::post('send/{slug}', [ChatController::class, 'send']);
 });
 
 //Google
