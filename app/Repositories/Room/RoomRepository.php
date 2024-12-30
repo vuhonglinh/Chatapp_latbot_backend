@@ -20,6 +20,7 @@ class RoomRepository extends BaseRepository
             $rooms = $this->model->whereJsonContains('ids', $user->id)->get();
             return $rooms;
         } catch (\Throwable $e) {
+
         }
     }
 
